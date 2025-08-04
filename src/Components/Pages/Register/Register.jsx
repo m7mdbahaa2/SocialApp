@@ -1,16 +1,33 @@
 
+import axios from "axios";
 import { Button, Checkbox, Label, Radio, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import Link from "next/link";
 
 export default function Register() {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
+    const navigate = useNavigate()
 
-
-    function onClick(data) {
+    async function onClick(data) {
         console.log(data);
+
+        try {
+            const { data: response } = await axios.post('https://linked-posts.routemisr.com/users/signup', data)
+            console.log(response);
+            console.log(response.message);
+
+            if (response.message ) {
+                navigate('/login')
+            } else {
+                throw new Error("invalid login date");
+
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
     }
     return (
         <div className=" max-w-lg mx-auto p-8 m-8 rounded-lg shadow-lg shadow-gray-500">
